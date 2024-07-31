@@ -1,4 +1,4 @@
-package com.limite_certo.config;
+package com.limite_certo.infrastructure.config;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;

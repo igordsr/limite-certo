@@ -1,5 +1,6 @@
 package com.limite_certo.service;
 
+import com.limite_certo.controller.exception.modal.CustomException;
 import com.limite_certo.entity.ClienteEntity;
 import com.limite_certo.repository.ClienteEntityRepository;
 import com.limite_certo.util.dto.ClienteBaseDTO;
@@ -25,4 +26,13 @@ public class ClienteService extends BaseService<ClienteEntity, ClienteBaseDTO> {
     protected ClienteBaseDTO convertToEntity(ClienteEntity entity) {
         return entity.toDTO();
     }
+
+    @Override
+    protected void executarValidacoesAntesDeCadastrar(ClienteBaseDTO dto) throws RuntimeException {
+        this.repository.findByCpf(dto.getCpf()).ifPresent(cliente -> {
+            throw new CustomException("Usuário com CPF " + cliente.getCpf() + " já existe.");
+        });
+    }
+
+
 }

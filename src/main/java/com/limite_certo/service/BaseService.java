@@ -21,9 +21,12 @@ public abstract class BaseService<T extends BaseEntity<?>, D extends BaseDTO<?>>
 
     protected abstract D convertToEntity(T entity);
 
+    protected abstract void executarValidacoesAntesDeCadastrar(D dto) throws RuntimeException;
+
     @JsonView(Views.Parcial.class)
     @Transactional(rollbackFor = Throwable.class)
-    public D cadastrar(D dto) {
+    public D cadastrar(final D dto) {
+        this.executarValidacoesAntesDeCadastrar(dto);
         T entidade = this.convertToEntity(dto);
         entidade = repository.save(entidade);
         return this.convertToEntity(entidade);

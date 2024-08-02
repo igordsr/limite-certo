@@ -75,8 +75,8 @@ public class ClienteBaseDTO extends BaseDTO<ClienteEntity> {
     String pais;
 
     @Override
-    @JsonView(Views.Parcial.class)
     @JsonProperty("id_cliente")
+    @JsonView(Views.IdView.class)
     public Long getId() {
         return super.id;
     }

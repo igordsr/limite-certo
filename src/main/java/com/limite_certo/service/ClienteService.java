@@ -34,5 +34,9 @@ public class ClienteService extends BaseService<ClienteEntity, ClienteBaseDTO> {
         });
     }
 
+    public ClienteEntity findByCpf(final String cpf) {
+        return this.repository.findByCpf(cpf)
+                .orElseThrow(() -> new CustomException("Usuário com CPF " + cpf + " não existe."));
 
+    }
 }

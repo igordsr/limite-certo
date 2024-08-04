@@ -46,4 +46,11 @@ public class CustomException extends RuntimeException {
         this.message = message;
         this.timestamp = Calendar.getInstance();
     }
+
+    public CustomException(String message, int code) {
+        super(message);
+        this.message = message;
+        this.timestamp = Calendar.getInstance();
+        this.code = code;
+    }
 }

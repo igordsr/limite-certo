@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @ControllerAdvice
@@ -94,8 +96,9 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<CustomException> handleCustomException(CustomException ex, HttpServletRequest request) {
-        ex.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        return new ResponseEntity<>(ex, HttpHeaders.EMPTY, HttpStatus.INTERNAL_SERVER_ERROR);
+        final Integer httpStatusCode = Optional.of(ex.getCode()).orElse(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ex.setCode(HttpStatusCode.valueOf(httpStatusCode).value());
+        return new ResponseEntity<>(ex, HttpHeaders.EMPTY, HttpStatusCode.valueOf(httpStatusCode).value());
     }
 
     private String getSqlErrorMessage(int errorCode) {

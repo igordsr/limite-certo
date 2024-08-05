@@ -1,8 +1,8 @@
 package com.limite_certo.service;
 
 import com.limite_certo.controller.exception.modal.CustomException;
-import com.limite_certo.entity.ClienteEntity;
-import com.limite_certo.repository.ClienteEntityRepository;
+import com.limite_certo.entity.Cliente;
+import com.limite_certo.repository.ClienteRepository;
 import com.limite_certo.dto.ClienteBaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,35 +10,35 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ClienteService extends BaseService<ClienteEntity, ClienteBaseDTO> {
-    private final ClienteEntityRepository repository;
+public class ClienteService extends BaseService<Cliente, ClienteBaseDTO> {
+    private final ClienteRepository repository;
 
     @Autowired
-    protected ClienteService(ClienteEntityRepository repository) {
+    protected ClienteService(ClienteRepository repository) {
         super(repository);
         this.repository = repository;
     }
 
     @Override
-    protected ClienteEntity convertToEntity(ClienteBaseDTO dto) {
+    protected Cliente convertToEntity(ClienteBaseDTO dto) {
         return dto.toEntity();
     }
 
     @Override
-    protected ClienteBaseDTO convertToEntity(ClienteEntity entity) {
+    protected ClienteBaseDTO convertToEntity(Cliente entity) {
         return entity.toDTO();
     }
 
     @Override
     protected void executarValidacoesAntesDeCadastrar(ClienteBaseDTO dto) throws RuntimeException {
-        Optional<ClienteEntity> clienteOptional = this.repository.findByCpf(dto.getCpf());
+        Optional<Cliente> clienteOptional = this.repository.findByCpf(dto.getCpf());
         if (clienteOptional.isPresent()) {
-            final ClienteEntity cliente = clienteOptional.get();
+            final Cliente cliente = clienteOptional.get();
             throw new CustomException("Usuário com CPF " + cliente.getCpf() + " já existe.");
         }
     }
 
-    public ClienteEntity findByCpf(final String cpf) {
+    public Cliente findByCpf(final String cpf) {
         return this.repository.findByCpf(cpf).orElseThrow(() -> new CustomException("Usuário com CPF " + cpf + " não existe."));
     }
 }

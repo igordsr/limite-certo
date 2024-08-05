@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @Table(name = "tb_pagamentos")
-public class PagamentoEntity extends BaseEntity<PagamentoDTO> {
+public class Pagamento extends BaseEntity<PagamentoDTO> {
     @Column(nullable = false)
     private Double valor;
 
@@ -30,11 +30,11 @@ public class PagamentoEntity extends BaseEntity<PagamentoDTO> {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
-    private ClienteEntity cliente;
+    private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "cartao_id", nullable = false)
-    private CartaoEntity cartao;
+    private Cartao cartao;
 
     @Override
     public PagamentoDTO toDTO() {

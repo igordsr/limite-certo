@@ -2,7 +2,7 @@ package com.limite_certo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.limite_certo.entity.ClienteEntity;
+import com.limite_certo.entity.Cliente;
 import com.limite_certo.util.view.Views;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 @Getter
 @Setter
-public class ClienteBaseDTO extends BaseDTO<ClienteEntity> {
+public class ClienteBaseDTO extends BaseDTO<Cliente> {
     @CPF
     @Schema(example = "59694668247")
     @Pattern(regexp = "\\d{11}", message = "CPF deve ser válido")
@@ -82,17 +82,17 @@ public class ClienteBaseDTO extends BaseDTO<ClienteEntity> {
     }
 
     @Override
-    public ClienteEntity toEntity() {
-        ClienteEntity clienteEntity = new ClienteEntity();
-        clienteEntity.setCpf(cpf);
-        clienteEntity.setNome(nome);
-        clienteEntity.setEmail(email);
-        clienteEntity.setTelefone(telefone);
-        clienteEntity.setRua(rua);
-        clienteEntity.setCidade(cidade);
-        clienteEntity.setEstado(estado);
-        clienteEntity.setCep(cep);
-        clienteEntity.setPais(pais);
-        return clienteEntity;
+    public Cliente toEntity() {
+        Cliente cliente = new Cliente();
+        cliente.setCpf(cpf);
+        cliente.setNome(nome);
+        cliente.setEmail(email);
+        cliente.setTelefone(telefone);
+        cliente.setRua(rua);
+        cliente.setCidade(cidade);
+        cliente.setEstado(estado);
+        cliente.setCep(cep);
+        cliente.setPais(pais);
+        return cliente;
     }
 }

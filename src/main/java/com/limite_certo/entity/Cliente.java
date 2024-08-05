@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @DynamicUpdate
 @Table(name = "tb_clientes")
-public class ClienteEntity extends BaseEntity<ClienteBaseDTO> {
+public class Cliente extends BaseEntity<ClienteBaseDTO> {
     @Column(nullable = false, unique = true)
     private String cpf;
 
@@ -45,10 +45,10 @@ public class ClienteEntity extends BaseEntity<ClienteBaseDTO> {
     private String pais;
 
     @OneToMany(mappedBy = "cliente")
-    private Set<CartaoEntity> cartoes;
+    private Set<Cartao> cartoes;
 
     @OneToMany(mappedBy = "cliente")
-    private Set<PagamentoEntity> pagamentos;
+    private Set<Pagamento> pagamentos;
 
     @Override
     public ClienteBaseDTO toDTO() {

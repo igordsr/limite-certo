@@ -3,10 +3,10 @@ package com.limite_certo.service;
 import com.limite_certo.controller.exception.modal.CustomException;
 import com.limite_certo.dto.PagamentoDTO;
 import com.limite_certo.dto.PagamentoViewDTO;
-import com.limite_certo.entity.CartaoEntity;
-import com.limite_certo.entity.ClienteEntity;
-import com.limite_certo.entity.PagamentoEntity;
-import com.limite_certo.repository.PagamentoEntityRepository;
+import com.limite_certo.entity.Cartao;
+import com.limite_certo.entity.Cliente;
+import com.limite_certo.entity.Pagamento;
+import com.limite_certo.repository.PagamentoRepository;
 import com.limite_certo.util.enums.MetodoPagamento;
 import com.limite_certo.util.enums.StatusPagamento;
 import com.limite_certo.util.validation.ValidationUtils;
@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PagamentoService extends BaseService<PagamentoEntity, PagamentoDTO> {
-    private final PagamentoEntityRepository repository;
+public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
+    private final PagamentoRepository repository;
     private final CartaoService cartaoService;
     private final ClienteService clienteService;
 
     @Autowired
-    protected PagamentoService(PagamentoEntityRepository repository, CartaoService cartaoService, ClienteService clienteService) {
+    protected PagamentoService(PagamentoRepository repository, CartaoService cartaoService, ClienteService clienteService) {
         super(repository);
         this.repository = repository;
         this.cartaoService = cartaoService;
@@ -32,10 +32,10 @@ public class PagamentoService extends BaseService<PagamentoEntity, PagamentoDTO>
 
 
     @Override
-    protected PagamentoEntity convertToEntity(PagamentoDTO dto) {
-        final PagamentoEntity entity = dto.toEntity();
-        final CartaoEntity cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
-        final ClienteEntity cliente = this.clienteService.findByCpf(dto.getCpf());
+    protected Pagamento convertToEntity(PagamentoDTO dto) {
+        final Pagamento entity = dto.toEntity();
+        final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
+        final Cliente cliente = this.clienteService.findByCpf(dto.getCpf());
         entity.setCartao(cartao);
         entity.setCliente(cliente);
         entity.setMetodoPagamento(MetodoPagamento.CARTAO_CREDITO);
@@ -44,17 +44,17 @@ public class PagamentoService extends BaseService<PagamentoEntity, PagamentoDTO>
     }
 
     @Override
-    protected PagamentoDTO convertToEntity(PagamentoEntity entity) {
+    protected PagamentoDTO convertToEntity(Pagamento entity) {
         return entity.toDTO();
     }
 
     @Override
     protected void executarValidacoesAntesDeCadastrar(PagamentoDTO dto) throws RuntimeException {
-        final CartaoEntity cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
+        final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
         this.validarLimiteCartao(cartao, dto);
     }
 
-    private void validarLimiteCartao(final CartaoEntity cartao, PagamentoDTO dto) {
+    private void validarLimiteCartao(final Cartao cartao, PagamentoDTO dto) {
         try {
             final Double creditoUtilizado = this.repository.somarValoresPorCartao(cartao.getNumero(), cartao.getDataValidade(), cartao.getCvv());
             final Double limiteRestante = cartao.getLimite() - creditoUtilizado;

@@ -3,8 +3,8 @@ package com.limite_certo.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.limite_certo.controller.exception.modal.CustomException;
-import com.limite_certo.entity.CartaoEntity;
-import com.limite_certo.entity.ClienteEntity;
+import com.limite_certo.entity.Cartao;
+import com.limite_certo.entity.Cliente;
 import com.limite_certo.util.view.Views;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -18,7 +18,7 @@ import java.time.format.DateTimeParseException;
 
 @Getter
 @Setter
-public class CartaoDTO extends BaseDTO<CartaoEntity> {
+public class CartaoDTO extends BaseDTO<Cartao> {
     @Schema(example = "5543 3451 4386 9263")
     @NotNull(message = "Numero do cartão não pode ser nulo.")
     @NotEmpty(message = "Numero do Cartão não pode ser em Branco.")
@@ -54,20 +54,20 @@ public class CartaoDTO extends BaseDTO<CartaoEntity> {
     private String cpf;
 
     @Override
-    public CartaoEntity toEntity() {
-        final CartaoEntity cartaoEntity = new CartaoEntity();
-        final ClienteEntity clienteEntity = new ClienteEntity();
+    public Cartao toEntity() {
+        final Cartao cartao = new Cartao();
+        final Cliente cliente = new Cliente();
         try {
-            clienteEntity.setCpf(cpf);
-            cartaoEntity.setNumero(numero);
-            cartaoEntity.setDataValidade(parseDataValidade(dataValidade));
-            cartaoEntity.setCvv(Integer.valueOf(cvv));
-            cartaoEntity.setLimite(limite);
-            cartaoEntity.setCliente(clienteEntity);
+            cliente.setCpf(cpf);
+            cartao.setNumero(numero);
+            cartao.setDataValidade(parseDataValidade(dataValidade));
+            cartao.setCvv(Integer.valueOf(cvv));
+            cartao.setLimite(limite);
+            cartao.setCliente(cliente);
         } catch (DateTimeParseException e) {
             throw new CustomException("Data de validade inválida: " + e.getMessage());
         }
-        return cartaoEntity;
+        return cartao;
     }
 
     @Override

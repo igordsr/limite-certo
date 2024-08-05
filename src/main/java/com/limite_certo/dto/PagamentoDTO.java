@@ -2,7 +2,7 @@ package com.limite_certo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.limite_certo.entity.PagamentoEntity;
+import com.limite_certo.entity.Pagamento;
 import com.limite_certo.util.validation.ValidationUtils;
 import com.limite_certo.util.view.Views;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,11 +11,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
-import java.util.Random;
-
 @Getter
 @Setter
-public class PagamentoDTO extends BaseDTO<PagamentoEntity> {
+public class PagamentoDTO extends BaseDTO<Pagamento> {
     @Schema(example = "5543 3451 4386 9263")
     @NotNull(message = "Numero do cartão não pode ser nulo.")
     @NotEmpty(message = "Numero do Cartão não pode ser em Branco.")
@@ -63,8 +61,8 @@ public class PagamentoDTO extends BaseDTO<PagamentoEntity> {
     }
 
     @Override
-    public PagamentoEntity toEntity() {
-        final PagamentoEntity pagamentoEntity = new PagamentoEntity();
+    public Pagamento toEntity() {
+        final Pagamento pagamento = new Pagamento();
         final CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setId(super.id);
         cartaoDTO.setNumero(numero);
@@ -72,9 +70,9 @@ public class PagamentoDTO extends BaseDTO<PagamentoEntity> {
         cartaoDTO.setDataValidade(dataValidade);
         cartaoDTO.setCvv(cvv);
         cartaoDTO.setCpf(cpf);
-        pagamentoEntity.setCartao(cartaoDTO.toEntity());
-        pagamentoEntity.setDescricao("Compra de produto X" + ValidationUtils.RANDOM.nextInt());
-        pagamentoEntity.setValor(valor);
-        return pagamentoEntity;
+        pagamento.setCartao(cartaoDTO.toEntity());
+        pagamento.setDescricao("Compra de produto X" + ValidationUtils.RANDOM.nextInt());
+        pagamento.setValor(valor);
+        return pagamento;
     }
 }

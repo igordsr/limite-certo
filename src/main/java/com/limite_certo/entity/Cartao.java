@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Table(name = "tb_cartoes", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"cliente_id", "numero"})
 })
-public class CartaoEntity extends BaseEntity<CartaoDTO> {
+public class Cartao extends BaseEntity<CartaoDTO> {
     @Column(nullable = false)
     private String numero;
 
@@ -31,7 +31,7 @@ public class CartaoEntity extends BaseEntity<CartaoDTO> {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
-    private ClienteEntity cliente;
+    private Cliente cliente;
 
 
     @Override

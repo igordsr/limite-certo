@@ -26,7 +26,7 @@ public class JwtUtils {
     private JwtUtils() {
     }
 
-    private static Key generateKey() {
+    public static Key generateKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -52,7 +52,7 @@ public class JwtUtils {
         return new JwtToken(token);
     }
 
-    private static Claims getClaimsFromToken(String token) {
+    static Claims getClaimsFromToken(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(generateKey()).build()
@@ -80,7 +80,7 @@ public class JwtUtils {
         return false;
     }
 
-    private static String refactorToken(String token) {
+    static String refactorToken(String token) {
         if (token.contains(JWT_BEARER)) {
             return token.substring(JWT_BEARER.length());
         }

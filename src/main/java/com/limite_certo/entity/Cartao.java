@@ -43,6 +43,6 @@ public class Cartao extends BaseEntity<CartaoDTO> {
         cartaoDTO.setDataValidade(dataValidade.toString());
         cartaoDTO.setCvv(cvv.toString());
         cartaoDTO.setCpf(cliente.getCpf());
-        return null;
+        return cartaoDTO;
     }
 }

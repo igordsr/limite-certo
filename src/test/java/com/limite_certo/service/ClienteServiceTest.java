@@ -29,51 +29,90 @@ class ClienteServiceTest {
 
     @Test
     void testExecutarValidacoesAntesDeCadastrarClienteExistente() {
-        // Arrange
         ClienteBaseDTO dto = new ClienteBaseDTO();
         dto.setCpf("12345678901");
         Cliente entity = new Cliente();
         entity.setCpf("12345678901");
         when(repository.findByCpf(dto.getCpf())).thenReturn(Optional.of(entity));
 
-        // Act & Assert
         CustomException exception = assertThrows(CustomException.class, () -> clienteService.executarValidacoesAntesDeCadastrar(dto));
         assertTrue(exception.getMessage().contains("Usuário com CPF 12345678901 já existe."));
     }
 
     @Test
     void testExecutarValidacoesAntesDeCadastrarClienteNovo() {
-        // Arrange
         ClienteBaseDTO dto = new ClienteBaseDTO();
         dto.setCpf("12345678901");
         when(repository.findByCpf(dto.getCpf())).thenReturn(Optional.empty());
 
-        // Act
         assertDoesNotThrow(() -> clienteService.executarValidacoesAntesDeCadastrar(dto));
     }
 
     @Test
     void testFindByCpfClienteExistente() {
-        // Arrange
         Cliente cliente = new Cliente();
         cliente.setCpf("12345678901");
         when(repository.findByCpf(cliente.getCpf())).thenReturn(Optional.of(cliente));
 
-        // Act
         Cliente result = clienteService.findByCpf(cliente.getCpf());
 
-        // Assert
         assertEquals(cliente, result);
     }
 
     @Test
     void testFindByCpfClienteNaoExistente() {
-        // Arrange
         String cpf = "12345678901";
         when(repository.findByCpf(cpf)).thenReturn(Optional.empty());
 
-        // Act & Assert
         CustomException exception = assertThrows(CustomException.class, () -> clienteService.findByCpf(cpf));
         assertTrue(exception.getMessage().contains("Usuário com CPF 12345678901 não existe."));
     }
+
+    @Test
+    void testConvertToEntity() {
+        // Arrange
+        ClienteBaseDTO dto = new ClienteBaseDTO();
+        dto.setCpf("12345678901");
+        Cliente expectedEntity = new Cliente();
+        expectedEntity.setCpf(dto.getCpf());
+
+        Cliente result = clienteService.convertToEntity(dto);
+
+        assertEquals(expectedEntity.getCpf(), result.getCpf());
+    }
+
+    @Test
+    void testConvertToDTO() {
+        Cliente entity = new Cliente();
+        entity.setCpf("12345678901");
+        ClienteBaseDTO expectedDTO = new ClienteBaseDTO();
+        expectedDTO.setCpf(entity.getCpf());
+
+        ClienteBaseDTO result = clienteService.convertToEntity(entity);
+
+        assertEquals(expectedDTO.getCpf(), result.getCpf());
+    }
+
+
+    @Test
+    void testExecutarValidacoesAntesDeCadastrarClienteExistente_() {
+        ClienteBaseDTO dto = new ClienteBaseDTO();
+        dto.setCpf("12345678901");
+        Cliente entity = new Cliente();
+        entity.setCpf("12345678901");
+        when(repository.findByCpf(dto.getCpf())).thenReturn(Optional.of(entity));
+
+        CustomException exception = assertThrows(CustomException.class, () -> clienteService.executarValidacoesAntesDeCadastrar(dto));
+        assertTrue(exception.getMessage().contains("Usuário com CPF 12345678901 já existe."));
+    }
+
+    @Test
+    void testExecutarValidacoesAntesDeCadastrarClienteNovo_() {
+        ClienteBaseDTO dto = new ClienteBaseDTO();
+        dto.setCpf("12345678901");
+        when(repository.findByCpf(dto.getCpf())).thenReturn(Optional.empty());
+
+        assertDoesNotThrow(() -> clienteService.executarValidacoesAntesDeCadastrar(dto));
+    }
+
 }

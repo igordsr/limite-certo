@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,34 +36,8 @@ class CartaoServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-//    @Test
-//    void testCadastrarComSucesso() {
-//        // Arrange
-//        CartaoDTO cartaoDTO = new CartaoDTO();
-//        cartaoDTO.setLimite(250.50);
-//        cartaoDTO.setCvv("415");
-//        cartaoDTO.setCpf("12345678900");
-//        cartaoDTO.setNumero("1234-5678-9876-5432");
-//        cartaoDTO.setDataValidade("12/24");
-//        Cliente clienteEntity = new Cliente();
-//        clienteEntity.setCartoes(new HashSet<>());
-//        Cartao cartaoEntity = new Cartao();
-//        cartaoEntity.setId(1L);
-//        cartaoEntity.setCliente(clienteEntity);
-//
-//        when(clienteService.findByCpf(any(String.class))).thenReturn(clienteEntity);
-//        when(repository.save(any(Cartao.class))).thenReturn(cartaoEntity);
-//
-//        // Act
-//        CartaoDTO result = cartaoService.cadastrar(cartaoDTO);
-//
-//        // Assert
-//        assertEquals(cartaoEntity.getId(), result.getId());
-//    }
-
     @Test
     void testCadastrarComQuantidadeDeCartoesExcedida() {
-        // Arrange
         CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setCpf("12345678900");
         cartaoDTO.setNumero("1234-5678-9876-5432");
@@ -74,14 +49,12 @@ class CartaoServiceTest {
 
         when(clienteService.findByCpf(any(String.class))).thenReturn(clienteEntity);
 
-        // Act & Assert
         CustomException thrown = assertThrows(CustomException.class, () -> cartaoService.cadastrar(cartaoDTO));
         assertEquals("O cliente com CPF 12345678900 já possui 2 cartões cadastrados", thrown.getMessage());
     }
 
     @Test
     void testCadastrarComCartaoJaCadastrado() {
-        // Arrange
         CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setCpf("12345678900");
         cartaoDTO.setNumero("1234-5678-9876-5432");
@@ -94,8 +67,62 @@ class CartaoServiceTest {
 
         when(clienteService.findByCpf(any(String.class))).thenReturn(clienteEntity);
 
-        // Act & Assert
         CustomException thrown = assertThrows(CustomException.class, () -> cartaoService.cadastrar(cartaoDTO));
         assertEquals("O cartão de credito com o numero 1234-5678-9876-5432 já está cadastrado", thrown.getMessage());
     }
+
+    @Test
+    void testConvertToEntity() {
+        CartaoDTO cartaoDTO = new CartaoDTO();
+        cartaoDTO.setCpf("12345678900");
+        cartaoDTO.setNumero("1234-5678-9876-5432");
+        cartaoDTO.setDataValidade("12/25");
+        cartaoDTO.setCvv("33");
+        Cliente cliente = new Cliente();
+        cliente.setCpf("12345678900");
+        when(clienteService.findByCpf(cartaoDTO.getCpf())).thenReturn(cliente);
+
+        Cartao cartao = cartaoService.convertToEntity(cartaoDTO);
+
+        assertEquals(cartaoDTO.getNumero(), cartao.getNumero());
+        assertEquals(cliente, cartao.getCliente());
+    }
+
+//    @Test
+//    void testConvertToDTO() {
+//        Cartao cartao = new Cartao();
+//        cartao.setNumero("1234-5678-9876-5432");
+//        CartaoDTO cartaoDTO = new CartaoDTO();
+//        cartaoDTO.setNumero(cartao.getNumero());
+//        cartaoDTO.setDataValidade("12/25");
+//        cartaoDTO.setCvv("33");
+//
+//        when(cartao.toDTO()).thenReturn(cartaoDTO);
+//
+//        CartaoDTO resultDTO = cartaoService.convertToEntity(cartao);
+//
+//        assertEquals(cartao.getNumero(), resultDTO.getNumero());
+//    }
+
+    @Test
+    void testFindByNumeroIgnoreCaseCartaoNaoEncontrado() {
+        String numeroCartao = "1234-5678-9876-5432";
+        when(repository.findByNumeroIgnoreCase(numeroCartao)).thenReturn(Optional.empty());
+
+        CustomException thrown = assertThrows(CustomException.class, () -> cartaoService.findByNumeroIgnoreCase(numeroCartao));
+        assertEquals("Cartão de numero 1234-5678-9876-5432 não existe.", thrown.getMessage());
+    }
+
+    @Test
+    void testFindByNumeroIgnoreCaseCartaoEncontrado() {
+        String numeroCartao = "1234-5678-9876-5432";
+        Cartao cartao = new Cartao();
+        cartao.setNumero(numeroCartao);
+        when(repository.findByNumeroIgnoreCase(numeroCartao)).thenReturn(Optional.of(cartao));
+
+        Cartao resultCartao = cartaoService.findByNumeroIgnoreCase(numeroCartao);
+
+        assertEquals(numeroCartao, resultCartao.getNumero());
+    }
+
 }

@@ -46,6 +46,10 @@ public class PagamentoDTO extends BaseDTO<PagamentoEntity> {
     @NotBlank(message = "CPF do usuário não pode ser em Branco.")
     @JsonView(Views.Completo.class)
     private String cpf;
+
+    @Schema(example = "100")
+    @NotNull(message = "Valor do Pagamento não pode ser nulo.")
+    @JsonView(Views.Completo.class)
     private Double valor;
 
     @Override

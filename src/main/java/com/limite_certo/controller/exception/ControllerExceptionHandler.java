@@ -96,7 +96,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<CustomException> handleCustomException(CustomException ex, HttpServletRequest request) {
-        final Integer httpStatusCode = Optional.of(ex.getCode()).orElse(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        final int httpStatusCode = Optional.of(ex.getCode()).orElse(HttpStatus.INTERNAL_SERVER_ERROR.value());
         ex.setCode(HttpStatusCode.valueOf(httpStatusCode).value());
         return new ResponseEntity<>(ex, HttpHeaders.EMPTY, HttpStatusCode.valueOf(httpStatusCode).value());
     }

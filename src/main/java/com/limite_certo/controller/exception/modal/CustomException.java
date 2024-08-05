@@ -8,9 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -22,7 +24,7 @@ public class CustomException extends RuntimeException {
     protected Calendar timestamp;
 
     @JsonProperty(value = "code")
-    protected int code;
+    protected int code = HttpStatus.INTERNAL_SERVER_ERROR.value();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "message")
@@ -47,10 +49,10 @@ public class CustomException extends RuntimeException {
         this.timestamp = Calendar.getInstance();
     }
 
-    public CustomException(String message, int code) {
+    public CustomException(String message, Optional<Integer> code) {
         super(message);
         this.message = message;
         this.timestamp = Calendar.getInstance();
-        this.code = code;
+        this.code = code.orElse(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }

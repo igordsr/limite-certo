@@ -1,14 +1,16 @@
 package com.limite_certo.service;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.limite_certo.controller.exception.modal.CustomException;
 import com.limite_certo.entity.BaseEntity;
-import com.limite_certo.exception.ValidationException;
 import com.limite_certo.repository.BaseRepository;
 import com.limite_certo.util.dto.BaseDTO;
 import com.limite_certo.util.view.Views;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 public abstract class BaseService<T extends BaseEntity<?>, D extends BaseDTO<?>> {
     private final BaseRepository<T, Long> repository;
@@ -26,7 +28,11 @@ public abstract class BaseService<T extends BaseEntity<?>, D extends BaseDTO<?>>
     @JsonView(Views.Parcial.class)
     @Transactional(rollbackFor = Throwable.class)
     public D cadastrar(final D dto) {
-        this.executarValidacoesAntesDeCadastrar(dto);
+        try {
+            this.executarValidacoesAntesDeCadastrar(dto);
+        } catch (CustomException e) {
+            throw new CustomException(e.getMessage(), Optional.of(e.getCode()));
+        }
         T entidade = this.convertToEntity(dto);
         entidade = repository.save(entidade);
         return this.convertToEntity(entidade);
@@ -50,7 +56,7 @@ public abstract class BaseService<T extends BaseEntity<?>, D extends BaseDTO<?>>
         return repository.findById(id).orElseThrow(this::notFound);
     }
 
-    private ValidationException notFound() {
-        return new ValidationException(String.format("%s não localizado.", "Registro"));
+    private CustomException notFound() {
+        return new CustomException(String.format("%s não localizado.", "Registro"));
     }
 }

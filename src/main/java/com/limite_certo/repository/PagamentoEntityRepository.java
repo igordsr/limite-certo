@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Repository
 public interface PagamentoEntityRepository extends BaseRepository<PagamentoEntity, Long> {
-    @Query("SELECT SUM(p.valor) FROM PagamentoEntity p WHERE p.cartao.numero = :numero AND p.cartao.dataValidade = :dataValidade AND p.cartao.cvv = :cvv")
+    @Query("SELECT COALESCE(SUM(p.valor), 0)  FROM PagamentoEntity p WHERE p.cartao.numero = :numero AND p.cartao.dataValidade = :dataValidade AND p.cartao.cvv = :cvv")
     Double somarValoresPorCartao(@Param("numero") String numero, @Param("dataValidade") LocalDate dataValidade, @Param("cvv") Integer cvv);
 
 }

@@ -49,4 +49,10 @@ public class CartaoService extends BaseService<CartaoEntity, CartaoDTO> {
             throw new CustomException(e.getMessage(), code);
         }
     }
+
+    public CartaoEntity findByNumeroIgnoreCase(final String numeroCartao) {
+        return this.repository.findByNumeroIgnoreCase(numeroCartao)
+                .orElseThrow(() -> new CustomException("Cartão de numero " + numeroCartao + " não existe."));
+
+    }
 }

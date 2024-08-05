@@ -1,6 +1,6 @@
 package com.limite_certo.entity;
 
-import com.limite_certo.util.dto.BaseDTO;
+import com.limite_certo.util.dto.PagamentoDTO;
 import com.limite_certo.util.enums.MetodoPagamento;
 import com.limite_certo.util.enums.StatusPagamento;
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @Table(name = "tb_pagamentos")
-public class PagamentoEntity extends BaseEntity {
+public class PagamentoEntity extends BaseEntity<PagamentoDTO> {
     @Column(nullable = false)
     private Double valor;
 
@@ -22,7 +22,7 @@ public class PagamentoEntity extends BaseEntity {
 
     @Column(nullable = false)
     @Convert(converter = MetodoPagamento.Converter.class)
-    private MetodoPagamento metodoPagamento;
+    private MetodoPagamento metodoPagamento = MetodoPagamento.CARTAO_CREDITO;
 
     @Column(nullable = false)
     @Convert(converter = StatusPagamento.Converter.class)
@@ -37,7 +37,15 @@ public class PagamentoEntity extends BaseEntity {
     private CartaoEntity cartao;
 
     @Override
-    public BaseDTO toDTO() {
-        return null;
+    public PagamentoDTO toDTO() {
+        final PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setId(id);
+        pagamentoDTO.setValor(valor);
+        pagamentoDTO.setCpf(cliente.getCpf());
+        pagamentoDTO.setNumero(cartao.getNumero());
+        pagamentoDTO.setDataValidade(cartao.getDataValidade().toString());
+        pagamentoDTO.setCvv(cartao.getCvv().toString());
+        pagamentoDTO.setValor(valor);
+        return pagamentoDTO;
     }
 }

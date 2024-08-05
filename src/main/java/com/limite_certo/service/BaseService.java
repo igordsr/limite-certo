@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.limite_certo.controller.exception.modal.CustomException;
 import com.limite_certo.entity.BaseEntity;
 import com.limite_certo.repository.BaseRepository;
-import com.limite_certo.util.dto.BaseDTO;
+import com.limite_certo.dto.BaseDTO;
 import com.limite_certo.util.view.Views;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Propagation;

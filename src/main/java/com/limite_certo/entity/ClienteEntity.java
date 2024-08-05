@@ -1,6 +1,6 @@
 package com.limite_certo.entity;
 
-import com.limite_certo.util.dto.ClienteBaseDTO;
+import com.limite_certo.dto.ClienteBaseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;

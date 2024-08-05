@@ -1,6 +1,6 @@
 package com.limite_certo.entity;
 
-import com.limite_certo.util.dto.CartaoDTO;
+import com.limite_certo.dto.CartaoDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

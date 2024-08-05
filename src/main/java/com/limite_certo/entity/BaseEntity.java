@@ -1,7 +1,7 @@
 package com.limite_certo.entity;
 
 import com.limite_certo.util.converter.ConvertibleToDTO;
-import com.limite_certo.util.dto.BaseDTO;
+import com.limite_certo.dto.BaseDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

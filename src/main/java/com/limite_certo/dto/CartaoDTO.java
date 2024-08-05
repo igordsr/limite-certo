@@ -1,4 +1,4 @@
-package com.limite_certo.util.dto;
+package com.limite_certo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;

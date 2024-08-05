@@ -3,7 +3,7 @@ package com.limite_certo.service;
 import com.limite_certo.controller.exception.modal.CustomException;
 import com.limite_certo.entity.ClienteEntity;
 import com.limite_certo.repository.ClienteEntityRepository;
-import com.limite_certo.util.dto.ClienteBaseDTO;
+import com.limite_certo.dto.ClienteBaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,14 +1,17 @@
-package com.limite_certo.util.dto;
+package com.limite_certo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.limite_certo.entity.PagamentoEntity;
+import com.limite_certo.util.validation.ValidationUtils;
 import com.limite_certo.util.view.Views;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
+
+import java.util.Random;
 
 @Getter
 @Setter
@@ -70,7 +73,7 @@ public class PagamentoDTO extends BaseDTO<PagamentoEntity> {
         cartaoDTO.setCvv(cvv);
         cartaoDTO.setCpf(cpf);
         pagamentoEntity.setCartao(cartaoDTO.toEntity());
-        pagamentoEntity.setDescricao("Compra de produto X");
+        pagamentoEntity.setDescricao("Compra de produto X" + ValidationUtils.RANDOM.nextInt());
         pagamentoEntity.setValor(valor);
         return pagamentoEntity;
     }

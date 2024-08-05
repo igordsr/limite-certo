@@ -1,6 +1,6 @@
 package com.limite_certo.entity;
 
-import com.limite_certo.util.dto.PagamentoDTO;
+import com.limite_certo.dto.PagamentoDTO;
 import com.limite_certo.util.enums.MetodoPagamento;
 import com.limite_certo.util.enums.StatusPagamento;
 import jakarta.persistence.*;

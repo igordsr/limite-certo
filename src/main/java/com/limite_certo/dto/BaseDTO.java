@@ -1,4 +1,4 @@
-package com.limite_certo.util.dto;
+package com.limite_certo.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.limite_certo.entity.BaseEntity;

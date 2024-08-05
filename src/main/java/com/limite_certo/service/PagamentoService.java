@@ -1,24 +1,25 @@
 package com.limite_certo.service;
 
 import com.limite_certo.controller.exception.modal.CustomException;
+import com.limite_certo.dto.PagamentoDTO;
+import com.limite_certo.dto.PagamentoViewDTO;
 import com.limite_certo.entity.CartaoEntity;
 import com.limite_certo.entity.ClienteEntity;
 import com.limite_certo.entity.PagamentoEntity;
 import com.limite_certo.repository.PagamentoEntityRepository;
-import com.limite_certo.util.dto.PagamentoDTO;
 import com.limite_certo.util.enums.MetodoPagamento;
 import com.limite_certo.util.enums.StatusPagamento;
 import com.limite_certo.util.validation.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PagamentoService extends BaseService<PagamentoEntity, PagamentoDTO> {
     private final PagamentoEntityRepository repository;
     private final CartaoService cartaoService;
-
     private final ClienteService clienteService;
 
     @Autowired
@@ -62,5 +63,9 @@ public class PagamentoService extends BaseService<PagamentoEntity, PagamentoDTO>
         } catch (Exception e) {
             throw new CustomException(e.getMessage(), Optional.of(402));
         }
+    }
+
+    public List<PagamentoViewDTO> consultaPagamentosCliente(Long chave) {
+        return this.repository.findByCliente_Id(chave).stream().map(PagamentoViewDTO::getInstanceFromEntity).toList();
     }
 }

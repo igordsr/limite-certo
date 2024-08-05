@@ -4,7 +4,7 @@ import com.limite_certo.controller.exception.modal.CustomException;
 import com.limite_certo.entity.CartaoEntity;
 import com.limite_certo.entity.ClienteEntity;
 import com.limite_certo.repository.CartaoEntityRepository;
-import com.limite_certo.util.dto.CartaoDTO;
+import com.limite_certo.dto.CartaoDTO;
 import com.limite_certo.util.validation.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

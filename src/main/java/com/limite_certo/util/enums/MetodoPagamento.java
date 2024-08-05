@@ -1,6 +1,7 @@
 package com.limite_certo.util.enums;
 
 import jakarta.persistence.AttributeConverter;
+import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -9,6 +10,7 @@ public enum MetodoPagamento {
     CARTAO_CREDITO("C", "CREDITO");
 
     private String id;
+    @Getter
     private String descricao;
 
     MetodoPagamento(String id, String descricao) {

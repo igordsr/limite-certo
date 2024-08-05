@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -80,5 +81,18 @@ public class CartaoDTO extends BaseDTO<Cartao> {
     private LocalDate parseDataValidade(String dataValidade) throws DateTimeParseException {
         LocalDate date = LocalDate.parse("01/" + dataValidade, DateTimeFormatter.ofPattern("dd/MM/yy"));
         return date.withDayOfMonth(date.lengthOfMonth());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartaoDTO cartaoDTO = (CartaoDTO) o;
+        return Objects.equals(numero, cartaoDTO.numero) && Objects.equals(limite, cartaoDTO.limite) && Objects.equals(dataValidade, cartaoDTO.dataValidade) && Objects.equals(cvv, cartaoDTO.cvv) && Objects.equals(cpf, cartaoDTO.cpf);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numero, limite, dataValidade, cvv, cpf);
     }
 }

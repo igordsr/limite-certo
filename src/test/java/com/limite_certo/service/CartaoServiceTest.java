@@ -34,6 +34,7 @@ class CartaoServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        this.cartaoService = new CartaoService(repository, clienteService);
     }
 
     @Test
@@ -83,6 +84,7 @@ class CartaoServiceTest {
         cartao1.setNumero("1234 5678 9012 3456");
         cartao1.setDataValidade(LocalDate.of(2024, 12, 12));
         cartao1.setCvv(123);
+        cartao1.setLimite(1000D);
 
         Set<Cartao> cartoes = new HashSet<>();
         cartoes.add(cartao1);
@@ -98,14 +100,15 @@ class CartaoServiceTest {
         entity.setCliente(cliente);
 
         when(clienteService.findByCpf(dto.getCpf())).thenReturn(cliente);
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any(Cartao.class))).thenReturn(entity);
 
         CartaoDTO result = cartaoService.cadastrar(dto);
 
-        assertNotNull(result);
-        verify(cartaoService).executarValidacoesAntesDeCadastrar(dto);
-        verify(repository).save(entity);
-        verify(cartaoService).convertToEntity(entity);
+        assertAll(
+                () -> assertNotNull(result),
+                () -> verify(this.repository, times(1)).save(any(Cartao.class)),
+                () -> assertEquals(Boolean.TRUE, result.equals(dto))
+        );
     }
 
     @Test

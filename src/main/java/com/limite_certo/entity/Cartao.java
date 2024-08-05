@@ -8,6 +8,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 
+import static com.limite_certo.util.converter.ConvertibleDate.convertDateToString;
+
 @Getter
 @Setter
 @Entity
@@ -40,7 +42,7 @@ public class Cartao extends BaseEntity<CartaoDTO> {
         cartaoDTO.setId(super.id);
         cartaoDTO.setNumero(numero);
         cartaoDTO.setLimite(limite);
-        cartaoDTO.setDataValidade(dataValidade.toString());
+        cartaoDTO.setDataValidade(convertDateToString(dataValidade));
         cartaoDTO.setCvv(cvv.toString());
         cartaoDTO.setCpf(cliente.getCpf());
         return cartaoDTO;

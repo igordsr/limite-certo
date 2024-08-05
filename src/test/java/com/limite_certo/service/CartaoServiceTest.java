@@ -11,14 +11,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CartaoServiceTest {
 
@@ -69,6 +69,43 @@ class CartaoServiceTest {
 
         CustomException thrown = assertThrows(CustomException.class, () -> cartaoService.cadastrar(cartaoDTO));
         assertEquals("O cartão de credito com o numero 1234-5678-9876-5432 já está cadastrado", thrown.getMessage());
+    }
+
+    @Test
+    public void testCadastrar_Success() {
+        CartaoDTO dto = new CartaoDTO();
+        dto.setCpf("12345678900");
+        dto.setNumero("1234-5678-9876-5432");
+        dto.setDataValidade("12/25");
+        dto.setCvv("33");
+
+        Cartao cartao1 = new Cartao();
+        cartao1.setNumero("1234 5678 9012 3456");
+        cartao1.setDataValidade(LocalDate.of(2024, 12, 12));
+        cartao1.setCvv(123);
+
+        Set<Cartao> cartoes = new HashSet<>();
+        cartoes.add(cartao1);
+
+        Cliente cliente = new Cliente();
+        cliente.setCpf("12345678900");
+        cliente.setCartoes(cartoes);
+
+        Cartao entity = new Cartao();
+        entity.setNumero("1234-5678-9876-5432");
+        entity.setDataValidade(LocalDate.of(2025, 12, 12));
+        entity.setCvv(33);
+        entity.setCliente(cliente);
+
+        when(clienteService.findByCpf(dto.getCpf())).thenReturn(cliente);
+        when(repository.save(entity)).thenReturn(entity);
+
+        CartaoDTO result = cartaoService.cadastrar(dto);
+
+        assertNotNull(result);
+        verify(cartaoService).executarValidacoesAntesDeCadastrar(dto);
+        verify(repository).save(entity);
+        verify(cartaoService).convertToEntity(entity);
     }
 
     @Test
@@ -123,6 +160,62 @@ class CartaoServiceTest {
         Cartao resultCartao = cartaoService.findByNumeroIgnoreCase(numeroCartao);
 
         assertEquals(numeroCartao, resultCartao.getNumero());
+    }
+
+    @Test
+    void testAtualizarEntidade_Success() {
+        Long id = 1L;
+        CartaoDTO dto = new CartaoDTO();
+        dto.setDataValidade("12/24");
+        dto.setNumero("1234-5678-9876-5432");
+        dto.setLimite(45.6);
+        dto.setCpf("12345678909");
+        dto.setCvv("22");
+        Cartao existingEntity = mock(Cartao.class);
+
+        when(clienteService.findByCpf(any())).thenReturn(mock(Cliente.class));
+        when(repository.findById(id)).thenReturn(Optional.of(existingEntity));
+        when(repository.save(existingEntity)).thenReturn(existingEntity);
+        when(cartaoService.convertToEntity(existingEntity)).thenReturn(dto);
+
+        CartaoDTO result = cartaoService.atualizarEntidade(id, dto);
+
+        assertNotNull(result);
+        verify(repository).findById(id);
+        verify(repository).save(existingEntity);
+    }
+
+
+    @Test
+    public void testApagarPorId() {
+        Long id = 1L;
+
+        cartaoService.apagarPorId(id);
+
+        verify(repository).deleteById(id);
+    }
+
+    @Test
+    public void testGetEntidade_Success() {
+        Long id = 1L;
+        Cartao entity = mock(Cartao.class);
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+
+        Cartao result = cartaoService.getEntidade(id);
+
+        assertNotNull(result);
+        verify(repository).findById(id);
+    }
+
+    @Test
+    public void testGetEntidade_NotFound() {
+        Long id = 1L;
+
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        CustomException exception = assertThrows(CustomException.class, () -> cartaoService.getEntidade(id));
+        assertEquals("Registro não localizado.", exception.getMessage());
     }
 
 }

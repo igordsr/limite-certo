@@ -70,6 +70,40 @@ public class PagamentoServiceTest {
         assertEquals(StatusPagamento.APROVADO, pagamento.getStatus());
     }
 
+    @Test
+    public void testConvertToEntity_() {
+        PagamentoDTO dto = new PagamentoDTO();
+        dto.setNumero("1234567890123456");
+        dto.setCpf("12345678900");
+        dto.setValor(100.0);
+        dto.setDataValidade("12/26");
+        dto.setCvv("33");
+
+        Cartao cartao = new Cartao();
+        cartao.setNumero("1234567890123456");
+        cartao.setLimite(500.0);
+        cartao.setDataValidade(LocalDate.of(2024, 12, 31));
+        cartao.setCvv(33);
+
+        Cliente cliente = new Cliente();
+        cliente.setCpf("12345678900");
+
+        Pagamento entity = new Pagamento();
+        entity.setCartao(cartao);
+        entity.setCliente(cliente);
+        entity.setStatus(StatusPagamento.APROVADO);
+        entity.setMetodoPagamento(MetodoPagamento.CARTAO_CREDITO);
+        entity.setDescricao("teste");
+        entity.setValor(66.0);
+
+        when(cartaoService.findByNumeroIgnoreCase(dto.getNumero())).thenReturn(cartao);
+        when(clienteService.findByCpf(dto.getCpf())).thenReturn(cliente);
+
+        PagamentoDTO pagamento = pagamentoService.convertToEntity(entity);
+
+        assertNotNull(pagamento);
+    }
+
 
     @Test
     public void testExecutarValidacoesAntesDeCadastrar_Valid() {

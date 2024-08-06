@@ -90,9 +90,4 @@ public class CartaoDTO extends BaseDTO<Cartao> {
         CartaoDTO cartaoDTO = (CartaoDTO) o;
         return Objects.equals(numero, cartaoDTO.numero) && Objects.equals(limite, cartaoDTO.limite) && Objects.equals(dataValidade, cartaoDTO.dataValidade) && Objects.equals(cvv, cartaoDTO.cvv) && Objects.equals(cpf, cartaoDTO.cpf);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(numero, limite, dataValidade, cvv, cpf);
-    }
 }

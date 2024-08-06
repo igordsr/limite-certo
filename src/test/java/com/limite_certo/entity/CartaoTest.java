@@ -28,7 +28,7 @@ public class CartaoTest {
         assertEquals(1L, cartaoDTO.getId());
         assertEquals("1234567890123456", cartaoDTO.getNumero());
         assertEquals(5000.00, cartaoDTO.getLimite());
-        assertEquals("2025-12-31", cartaoDTO.getDataValidade());
+        assertEquals("12/25", cartaoDTO.getDataValidade());
         assertEquals("123", cartaoDTO.getCvv());
         assertEquals("12345678900", cartaoDTO.getCpf());
     }

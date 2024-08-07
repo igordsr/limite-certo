@@ -49,19 +49,18 @@ public class PagamentoControllerTest {
     @Test
     public void testRegistrarPagamento() {
         // Arrange
-        Long chave = 1L;
-        List<PagamentoViewDTO> pagamentoViewDTOList = new ArrayList<>();
-        PagamentoViewDTO dto = new PagamentoViewDTO(6.6, "teste", "Cartão", StatusPagamento.APROVADO);
-        pagamentoViewDTOList.add(dto);
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        PagamentoDTO pagamentoCadastrado = new PagamentoDTO();
+        pagamentoCadastrado.setId(1L);
 
-        when(service.consultaPagamentosCliente(chave)).thenReturn(pagamentoViewDTOList);
+        when(service.cadastrar(pagamentoDTO)).thenReturn(pagamentoCadastrado);
 
         // Act
-        ResponseEntity<List<PagamentoViewDTO>> response = controller.consultaPagamentosCliente(chave);
+        ResponseEntity<PagamentoResponse> response = controller.registrarPagamento(pagamentoDTO);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(pagamentoViewDTOList, response.getBody());
+        assertEquals("1", response.getBody().getChave_pagamento());
     }
 }
 

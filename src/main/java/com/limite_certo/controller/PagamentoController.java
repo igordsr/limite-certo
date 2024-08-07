@@ -63,8 +63,9 @@ public class PagamentoController extends BaseRest<PagamentoDTO> {
         )
     }
 )
-public ResponseEntity<PagamentoDTO> registrarPagamento(@Valid @RequestBody PagamentoDTO pagamentoDTO) {
-    return new ResponseEntity<>(this.service.cadastrar(pagamentoDTO), HttpStatus.CREATED);
-}
+ public ResponseEntity<PagamentoResponse> registrarPagamento(@Valid @RequestBody PagamentoDTO pagamentoDTO) {
+        PagamentoDTO pagamentoCadastrado = this.service.cadastrar(pagamentoDTO);
+        return new ResponseEntity<>(new PagamentoResponse(pagamentoCadastrado.getId()), HttpStatus.OK);
+    }
 
 }

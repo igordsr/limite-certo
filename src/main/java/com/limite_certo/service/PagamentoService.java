@@ -53,6 +53,8 @@ public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
         final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
         this.validarLimiteCartao(cartao, dto);
         this.validarSeOCartaoExiste(cartao.getNumero(), dto);
+        this.validaADataDeValidadeDoCartao(cartao.getNumero(), dto);
+        this.validaCVVDoCartao(cartao.getNumero(), dto);
     }
 
     private void validarLimiteCartao(final Cartao cartao, PagamentoDTO dto) {
@@ -70,6 +72,17 @@ public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
         final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(numero);
         ValidationUtils.isFalse(Objects.equals(cartao.getCliente().getCpf(), dto.getCpf()), "Cartão não localizado para este Cliente.");
     }
+
+    private  void validaADataDeValidadeDoCartao(final String numero, PagamentoDTO dto) {
+        final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(numero);
+        ValidationUtils.isFalse(cartao.getDataValidade().isAfter(LocalDate.now()), "Cartão esta com data de validade vencida.");
+    }
+
+    private void validaCVVDoCartao(final String numero, PagamentoDTO dto) {
+        final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(numero);
+        ValidationUtils.isFalse(Objects.equals(cartao.getCvv(), dto.getCvv()), "CVV do cartão inválido.");
+    }
+
     public  PagamentoDTO cadastrar(final PagamentoDTO dto) {
         try {
             this.executarValidacoesAntesDeCadastrar(dto);

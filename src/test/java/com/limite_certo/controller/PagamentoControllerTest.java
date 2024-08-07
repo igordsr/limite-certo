@@ -45,5 +45,23 @@ public class PagamentoControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(pagamentoViewDTOList, response.getBody());
     }
+
+    @Test
+    public void testRegistrarPagamento() {
+        // Arrange
+        Long chave = 1L;
+        List<PagamentoViewDTO> pagamentoViewDTOList = new ArrayList<>();
+        PagamentoViewDTO dto = new PagamentoViewDTO(6.6, "teste", "Cartão", StatusPagamento.APROVADO);
+        pagamentoViewDTOList.add(dto);
+
+        when(service.consultaPagamentosCliente(chave)).thenReturn(pagamentoViewDTOList);
+
+        // Act
+        ResponseEntity<List<PagamentoViewDTO>> response = controller.consultaPagamentosCliente(chave);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(pagamentoViewDTOList, response.getBody());
+    }
 }
 

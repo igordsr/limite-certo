@@ -52,6 +52,7 @@ public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
     protected void executarValidacoesAntesDeCadastrar(PagamentoDTO dto) throws RuntimeException {
         final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
         this.validarLimiteCartao(cartao, dto);
+        this.validarSeOCartaoExiste(cartao.getNumero(), dto);
     }
 
     private void validarLimiteCartao(final Cartao cartao, PagamentoDTO dto) {
@@ -63,6 +64,21 @@ public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
         } catch (Exception e) {
             throw new CustomException(e.getMessage(), Optional.of(402));
         }
+    }
+
+    private void validarSeOCartaoExiste(final String numero, PagamentoDTO dto) {
+        final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(numero);
+        ValidationUtils.isFalse(Objects.equals(cartao.getCliente().getCpf(), dto.getCpf()), "Cartão não localizado para este Cliente.");
+    }
+    public  PagamentoDTO cadastrar(final PagamentoDTO dto) {
+        try {
+            this.executarValidacoesAntesDeCadastrar(dto);
+        } catch (CustomException e) {
+            throw new CustomException(e.getMessage(), Optional.of(e.getCode()));
+        }
+        Pagamento entidade = this.convertToEntity(dto);
+        entidade = repository.save(entidade);
+        return this.convertToEntity(entidade);
     }
 
     public List<PagamentoViewDTO> consultaPagamentosCliente(Long chave) {

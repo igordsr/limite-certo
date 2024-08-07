@@ -14,6 +14,12 @@ public class ValidationUtils {
         }
     }
 
+    public static void isFalse(boolean expression, String message) {
+        if (!expression) {
+            throw new CustomException(message);
+        }
+    }
+
     public static void isNull(Object obj, String message) {
         if (Objects.isNull(obj)) {
             throw new CustomException(message);

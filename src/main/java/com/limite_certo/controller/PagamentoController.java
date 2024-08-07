@@ -50,4 +50,21 @@ public class PagamentoController extends BaseRest<PagamentoDTO> {
         return new ResponseEntity<>(this.service.consultaPagamentosCliente(Chave), HttpStatus.OK);
     }
 
+    @PostMapping()
+@Operation(
+    summary = "Registrar um novo pagamento",
+    description = "Registrar um novo pagamento com os dados fornecidos",
+    method = "POST",
+    responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Pagamento registrado com sucesso",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PagamentoDTO.class))
+        )
+    }
+)
+public ResponseEntity<PagamentoDTO> registrarPagamento(@Valid @RequestBody PagamentoDTO pagamentoDTO) {
+    return new ResponseEntity<>(this.service.cadastrar(pagamentoDTO), HttpStatus.CREATED);
+}
+
 }

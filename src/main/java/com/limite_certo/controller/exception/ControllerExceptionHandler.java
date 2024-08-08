@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -108,5 +110,25 @@ public class ControllerExceptionHandler {
             case 2601 -> "Não é permitido inserir registro duplicado.";
             default -> "Erro de acesso ao banco de dados";
         };
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<CustomException> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        log.warn("Authentication error: {}", ex.getMessage());
+        CustomException err = new CustomException();
+        err.setCode(HttpStatus.UNAUTHORIZED.value());
+        err.setMessage("Não autorizado");
+        err.setDetails(List.of(ex.getMessage()));
+        return new ResponseEntity<>(err, HttpHeaders.EMPTY, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<CustomException> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+        log.warn("Bad credentials: {}", ex.getMessage());
+        CustomException err = new CustomException();
+        err.setCode(HttpStatus.UNAUTHORIZED.value());
+        err.setMessage("Credenciais inválidas");
+        err.setDetails(List.of(ex.getMessage()));
+        return new ResponseEntity<>(err, HttpHeaders.EMPTY, HttpStatus.UNAUTHORIZED);
     }
 }

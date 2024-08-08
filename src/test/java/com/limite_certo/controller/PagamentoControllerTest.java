@@ -1,5 +1,7 @@
 package com.limite_certo.controller;
 
+import com.limite_certo.dto.PagamentoDTO;
+import com.limite_certo.dto.PagamentoResponse;
 import com.limite_certo.dto.PagamentoViewDTO;
 import com.limite_certo.service.PagamentoService;
 import com.limite_certo.util.enums.StatusPagamento;

@@ -13,7 +13,9 @@ import com.limite_certo.util.validation.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -73,17 +75,17 @@ public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
         ValidationUtils.isFalse(Objects.equals(cartao.getCliente().getCpf(), dto.getCpf()), "Cartão não localizado para este Cliente.");
     }
 
-    private  void validaADataDeValidadeDoCartao(final String numero, PagamentoDTO dto) {
+    private void validaADataDeValidadeDoCartao(final String numero, PagamentoDTO dto) {
         final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(numero);
         ValidationUtils.isFalse(cartao.getDataValidade().isAfter(LocalDate.now()), "Cartão esta com data de validade vencida.");
     }
 
     private void validaCVVDoCartao(final String numero, PagamentoDTO dto) {
         final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(numero);
-        ValidationUtils.isFalse(Objects.equals(cartao.getCvv(), dto.getCvv()), "CVV do cartão inválido.");
+        ValidationUtils.isFalse(Objects.equals(cartao.getCvv(), Integer.valueOf(dto.getCvv())), "CVV do cartão inválido.");
     }
 
-    public  PagamentoDTO cadastrar(final PagamentoDTO dto) {
+    public PagamentoDTO cadastrar(final PagamentoDTO dto) {
         try {
             this.executarValidacoesAntesDeCadastrar(dto);
         } catch (CustomException e) {

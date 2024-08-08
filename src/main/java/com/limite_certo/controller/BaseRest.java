@@ -1,8 +1,8 @@
 package com.limite_certo.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.limite_certo.service.BaseService;
 import com.limite_certo.dto.BaseDTO;
+import com.limite_certo.service.BaseService;
 import com.limite_certo.util.view.Views;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +35,7 @@ public abstract class BaseRest<D extends BaseDTO<?>> {
                     )
             }
     )
-    public ResponseEntity<D> cadastrarEntidade(@RequestBody @Valid @JsonView(Views.Completo.class) final D dto) {
+    public ResponseEntity<?> cadastrarEntidade(@RequestBody @Valid @JsonView(Views.Completo.class) final D dto) {
         return new ResponseEntity<>(this.service.cadastrar(dto), HttpStatus.OK);
     }
 }

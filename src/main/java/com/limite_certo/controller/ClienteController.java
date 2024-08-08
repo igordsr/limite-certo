@@ -1,8 +1,8 @@
 package com.limite_certo.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.limite_certo.service.ClienteService;
 import com.limite_certo.dto.ClienteBaseDTO;
+import com.limite_certo.service.ClienteService;
 import com.limite_certo.util.view.Views;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,7 +37,7 @@ public class ClienteController extends BaseRest<ClienteBaseDTO> {
             }
     )
     @JsonView(Views.IdView.class)
-    public ResponseEntity<ClienteBaseDTO> cadastrarEntidade(ClienteBaseDTO dto) {
+    public ResponseEntity<?> cadastrarEntidade(ClienteBaseDTO dto) {
         return super.cadastrarEntidade(dto);
     }
 }

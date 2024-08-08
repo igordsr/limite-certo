@@ -39,14 +39,16 @@ public class CartaoService extends BaseService<Cartao, CartaoDTO> {
 
     @Override
     protected void executarValidacoesAntesDeCadastrar(CartaoDTO dto) {
+        dto.setNumero(dto.getNumero().replace(" ", ""));
         final Cliente cliente = this.clienteService.findByCpf(dto.getCpf());
         this.validarQuantidadeDeCartaoUsuario(cliente.getCartoes(), dto);
         this.validarCartaoCadastrados(cliente.getCartoes(), dto);
     }
 
     public Cartao findByNumeroIgnoreCase(final String numeroCartao) {
-        return this.repository.findByNumeroIgnoreCase(numeroCartao)
-                .orElseThrow(() -> new CustomException("Cartão de numero " + numeroCartao + " não existe."));
+        String replace = numeroCartao.replace(" ", "");
+        return this.repository.findByNumeroIgnoreCase(replace)
+                .orElseThrow(() -> new CustomException("Cartão de numero " + replace + " não existe."));
 
     }
 

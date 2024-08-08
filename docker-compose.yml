@@ -1,31 +1,31 @@
 version: '3.8'
 
 services:
-  limite-certo:
+  limite-certo-service:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://limite-certo-db:3306/msportfolios_limite_certo
+      SPRING_DATASOURCE_URL: jdbc:mysql://limite-certo-db:3306/limiteCertoDB
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - limite-certo-db
     networks:
-      - limite-certo-network
+      - limite-certo-microservicos
 
   limite-certo-db:
-    image: mysql:8.0
+    image: mysql:latest
     environment:
-      MYSQL_DATABASE: msportfolios_limite_certo
+      MYSQL_DATABASE: limiteCertoDB
       MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
     networks:
-      - limite-certo-network
+      - limite-certo-microservicos
+    ports:
+      - "3307:3306"
 
 networks:
-  limite-certo-network:
+  limite-certo-microservicos:
     driver: bridge

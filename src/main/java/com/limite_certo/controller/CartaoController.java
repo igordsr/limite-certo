@@ -34,7 +34,7 @@ public class CartaoController extends BaseRest<CartaoDTO> {
             }
     )
     @JsonView(Views.None.class)
-    public ResponseEntity<Void> cadastrarEntidade(@JsonView(Views.Completo.class) CartaoDTO dto) {
+    public ResponseEntity<?> cadastrarEntidade(@JsonView(Views.Completo.class) CartaoDTO dto) {
         super.cadastrarEntidade(dto);
         return ResponseEntity.ok().build();
     }

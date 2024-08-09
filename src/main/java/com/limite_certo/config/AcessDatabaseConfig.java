@@ -30,6 +30,8 @@ public class AcessDatabaseConfig {
         userLogin.setUsername(username);
         userLogin.setRole("ROLE_ADMIN");
         userLogin.setPassword(passwordEncoder.encode(password));
-        userLoginRepository.save(userLogin);
+        if(this.userLoginRepository.findByUsername(username).isEmpty()){
+            userLoginRepository.save(userLogin);
+        }
     }
 }

@@ -52,6 +52,8 @@ public class PagamentoService extends BaseService<Pagamento, PagamentoDTO> {
 
     @Override
     protected void executarValidacoesAntesDeCadastrar(PagamentoDTO dto) throws RuntimeException {
+        String replace = dto.getNumero().replace(" ", "");
+        dto.setNumero(replace);
         final Cartao cartao = this.cartaoService.findByNumeroIgnoreCase(dto.getNumero());
         this.validarLimiteCartao(cartao, dto);
         this.validarSeOCartaoExiste(cartao.getNumero(), dto);

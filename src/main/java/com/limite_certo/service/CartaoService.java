@@ -26,6 +26,8 @@ public class CartaoService extends BaseService<Cartao, CartaoDTO> {
 
     @Override
     protected Cartao convertToEntity(CartaoDTO dto) {
+        String replace = dto.getNumero().replace(" ", "");
+        dto.setNumero(replace);
         final Cliente cliente = this.clienteService.findByCpf(dto.getCpf());
         Cartao cartao = dto.toEntity();
         cartao.setCliente(cliente);
